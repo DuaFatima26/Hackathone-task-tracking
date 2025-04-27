@@ -114,7 +114,7 @@ if (signupForm) {
         auth.createUserWithEmailAndPassword(email, password)
             .then(() => {
                 authModal.classList.remove("active");
-                alert("🎉 Account Created Successfully! Welcome to TaskMaster!");
+                alert(" Account Created Successfully! Welcome to TaskMaster!");
                 clearMessage();
             })
             .catch(error => {
@@ -151,7 +151,7 @@ if (googleSignIn) {
         try {
             const result = await auth.signInWithPopup(googleProvider);
             authModal.classList.remove("active");
-            alert(`👋 Welcome ${result.user.displayName || 'User'}! Google login successful!`);
+            alert(` Welcome ${result.user.displayName || 'User'}! Google login successful!`);
            
             window.location.href = "./html/dashboard.html"; 
             clearMessage();
