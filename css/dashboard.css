@@ -479,3 +479,36 @@ textarea.form-control {
         padding-left: 2.5rem;
     }
 }
+
+.task.dragging {
+    opacity: 0.5;
+    transform: scale(0.95);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.tasks-container.drop-target {
+    background-color: rgba(72, 149, 239, 0.05);
+    border: 2px dashed var(--accent);
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.tasks-container.drop-target.todo {
+    border-color: var(--todo);
+    background-color: rgba(255, 158, 0, 0.05);
+}
+
+.tasks-container.drop-target.inprogress {
+    border-color: var(--inprogress);
+    background-color: rgba(67, 97, 238, 0.05);
+}
+
+.tasks-container.drop-target.done {
+    border-color: var(--done);
+    background-color: rgba(76, 201, 240, 0.05);
+}
+
+.tasks-container.drop-target.hovered {
+    background-color: rgba(72, 149, 239, 0.1);
+    transform: scale(1.01);
+}

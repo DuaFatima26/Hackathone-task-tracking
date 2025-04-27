@@ -17,7 +17,6 @@ const auth = firebase.auth();
 
 auth.onAuthStateChanged(user => {
     if (!user) {
-        
         window.location.href = "../index.html";
     }
 });
@@ -31,7 +30,7 @@ function logout() {
     });
 }
 
-// Add a new task
+
 function addTask() {
     const title = document.getElementById('task-title').value;
     const description = document.getElementById('task-description').value;
@@ -49,11 +48,10 @@ function addTask() {
 
         newTaskRef.set(taskData)
             .then(() => {
-              
                 document.getElementById('task-title').value = '';
                 document.getElementById('task-description').value = '';
                 document.getElementById('assigned-to').value = '';
-             
+                
                 const btn = document.querySelector('.add-task-btn');
                 btn.innerHTML = '<i class="fas fa-check"></i> Task Added!';
                 btn.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
@@ -68,13 +66,11 @@ function addTask() {
                 alert("Error adding task: " + error.message);
             });
     } else {
-     
         const form = document.querySelector('.task-form');
         form.style.animation = 'shake 0.5s';
         setTimeout(() => {
             form.style.animation = '';
         }, 500);
-        
         alert("Please fill in all fields");
     }
 }
@@ -82,7 +78,7 @@ function addTask() {
 
 function editTask(taskId, currentTask) {
     const title = prompt("Enter new title:", currentTask.title);
-    if (title === null) return; 
+    if (title === null) return;
     
     const description = prompt("Enter new description:", currentTask.description);
     if (description === null) return;
@@ -96,7 +92,6 @@ function editTask(taskId, currentTask) {
             description: description,
             assignedTo: assignedTo
         }).then(() => {
-           
             const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
             if (taskElement) {
                 taskElement.style.transform = 'scale(1.05)';
@@ -112,6 +107,7 @@ function editTask(taskId, currentTask) {
         });
     }
 }
+
 
 function deleteTask(taskId) {
     if (confirm("Are you sure you want to delete this task?")) {
@@ -145,6 +141,16 @@ function moveTask(taskId, newStatus) {
     
     db.ref('tasks/' + taskId).update({
         status: newStatus
+    }).then(() => {
+        if (taskElement) {
+            // Add success animation with the help of Ai
+            taskElement.style.transform = 'scale(1)';
+            taskElement.style.opacity = '1';
+            taskElement.style.boxShadow = '0 0 15px rgba(40, 167, 69, 0.5)';
+            setTimeout(() => {
+                taskElement.style.boxShadow = '';
+            }, 1000);
+        }
     }).catch(error => {
         console.error("Error moving task:", error);
         alert("Error moving task: " + error.message);
@@ -161,13 +167,11 @@ function displayTasks(tasks, searchTerm = '') {
     const inProgressContainer = document.querySelector('#inprogress-tasks .tasks-container');
     const doneContainer = document.querySelector('#done-tasks .tasks-container');
 
-    
     todoContainer.innerHTML = '';
     inProgressContainer.innerHTML = '';
     doneContainer.innerHTML = '';
 
     if (!tasks) {
-    
         todoContainer.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No tasks to display</p></div>';
         inProgressContainer.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No tasks in progress</p></div>';
         doneContainer.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No completed tasks</p></div>';
@@ -178,7 +182,6 @@ function displayTasks(tasks, searchTerm = '') {
     const searchTermLower = searchTerm.toLowerCase();
 
     Object.entries(tasks).forEach(([taskId, task]) => {
-       
         const matchesSearch = searchTerm === '' || 
             (task.title && task.title.toLowerCase().includes(searchTermLower)) ||
             (task.description && task.description.toLowerCase().includes(searchTermLower)) ||
@@ -202,22 +205,22 @@ function displayTasks(tasks, searchTerm = '') {
         }
     });
 
-    
     if (searchTerm && !hasResults) {
         const noResultsDiv = document.createElement('div');
         noResultsDiv.className = 'no-results';
         noResultsDiv.innerHTML = '<i class="fas fa-search"></i><p>No tasks found matching your search</p>';
         
-       
         todoContainer.appendChild(noResultsDiv.cloneNode(true));
         inProgressContainer.appendChild(noResultsDiv.cloneNode(true));
         doneContainer.appendChild(noResultsDiv.cloneNode(true));
     } else if (!hasResults) {
-        
         todoContainer.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No tasks to display</p></div>';
         inProgressContainer.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No tasks in progress</p></div>';
         doneContainer.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No completed tasks</p></div>';
     }
+
+  
+    setupDragAndDrop();
 }
 
 
@@ -225,6 +228,7 @@ function createTaskElement(taskId, task) {
     const taskElement = document.createElement('div');
     taskElement.className = `task ${task.status.toLowerCase().replace(' ', '')}`;
     taskElement.setAttribute('data-task-id', taskId);
+    taskElement.draggable = true;
     
     taskElement.innerHTML = `
         <div class="status-badge">${task.status}</div>
@@ -236,7 +240,6 @@ function createTaskElement(taskId, task) {
     
     const actionsContainer = taskElement.querySelector('.task-actions');
     
-  
     if (task.status === 'To Do') {
         addActionButton(actionsContainer, 'Start Progress', () => moveTask(taskId, 'In Progress'), 'fas fa-play', 'move-btn');
     } else if (task.status === 'In Progress') {
@@ -252,6 +255,7 @@ function createTaskElement(taskId, task) {
     return taskElement;
 }
 
+
 function addActionButton(container, text, onClick, iconClass, btnClass) {
     const button = document.createElement('button');
     button.className = `action-btn ${btnClass}`;
@@ -260,9 +264,92 @@ function addActionButton(container, text, onClick, iconClass, btnClass) {
     container.appendChild(button);
 }
 
+// Drag and Drop functionality with the little bit help of ai
+function setupDragAndDrop() {
+    const tasks = document.querySelectorAll('.task');
+    const containers = document.querySelectorAll('.tasks-container');
+    
+    tasks.forEach(task => {
+        task.draggable = true;
+        
+        task.addEventListener('dragstart', (e) => {
+            task.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', task.getAttribute('data-task-id'));
+            e.dataTransfer.effectAllowed = 'move';
+        });
+        
+        task.addEventListener('dragend', () => {
+            task.classList.remove('dragging');
+        });
+    });
+    
+    containers.forEach(container => {
+        container.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const afterElement = getDragAfterElement(container, e.clientY);
+            const draggable = document.querySelector('.dragging');
+            
+            container.classList.add('drop-target', 'hovered');
+            
+            if (container.closest('#todo-tasks')) {
+                container.classList.add('todo');
+            } else if (container.closest('#inprogress-tasks')) {
+                container.classList.add('inprogress');
+            } else if (container.closest('#done-tasks')) {
+                container.classList.add('done');
+            }
+            
+            if (afterElement == null) {
+                container.appendChild(draggable);
+            } else {
+                container.insertBefore(draggable, afterElement);
+            }
+        });
+        
+        container.addEventListener('dragleave', () => {
+            container.classList.remove('drop-target', 'hovered', 'todo', 'inprogress', 'done');
+        });
+        
+        container.addEventListener('drop', (e) => {
+            e.preventDefault();
+            container.classList.remove('drop-target', 'hovered', 'todo', 'inprogress', 'done');
+            
+            const taskId = e.dataTransfer.getData('text/plain');
+            const draggedTask = document.querySelector(`[data-task-id="${taskId}"]`);
+            
+            if (draggedTask && container !== draggedTask.parentNode) {
+                let newStatus = 'To Do';
+                if (container.closest('#inprogress-tasks')) {
+                    newStatus = 'In Progress';
+                } else if (container.closest('#done-tasks')) {
+                    newStatus = 'Done';
+                }
+                
+                moveTask(taskId, newStatus);
+            }
+        });
+    });
+}
+
+
+function getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.task:not(.dragging)')];
+    
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
 // Initialize the app
 window.onload = function() {
-    // Add shake animation to CSS with the help of Ai
+    // Add custom animations with the help of Ai
     const style = document.createElement('style');
     style.textContent = `
         @keyframes shake {
@@ -276,13 +363,13 @@ window.onload = function() {
     `;
     document.head.appendChild(style);
     
-    
+   
     db.ref('tasks').on('value', (snapshot) => {
         const searchInput = document.getElementById('task-search');
         displayTasks(snapshot.val(), searchInput ? searchInput.value : '');
     });
 
-    
+ 
     const searchInput = document.getElementById('task-search');
     const clearSearchBtn = document.getElementById('clear-search');
 
