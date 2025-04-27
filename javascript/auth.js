@@ -114,7 +114,7 @@ if (signupForm) {
         auth.createUserWithEmailAndPassword(email, password)
             .then(() => {
                 authModal.classList.remove("active");
-                alert(" Account Created Successfully! Welcome to TaskMaster!");
+                alert("Account Created Successfully! Welcome to TaskMaster!");
                 clearMessage();
             })
             .catch(error => {
