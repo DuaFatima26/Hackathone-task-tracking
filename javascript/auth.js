@@ -90,7 +90,7 @@ if (loginForm) {
         auth.signInWithEmailAndPassword(email, password)
             .then(() => {
                 // Redirect to dashboard on successful login
-                window.location.href = "dashboard.html"; // Replace with your dashboard page path
+                window.location.href = "./html/dashboard.html"; // Replace with your dashboard page path
                 clearMessage();
             })
             .catch(error => {
@@ -154,7 +154,7 @@ if (googleSignIn) {
             authModal.classList.remove("active");
             alert(`👋 Welcome ${result.user.displayName || 'User'}! Google login successful!`);
             // Redirect to dashboard
-            window.location.href = "dashboard.html"; // Replace with your dashboard page path
+            window.location.href = "./html/dashboard.html"; // Replace with your dashboard page path
             clearMessage();
         } catch (error) {
             showMessage(getFriendlyErrorMessage(error), "error");
