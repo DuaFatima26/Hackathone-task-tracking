@@ -4,24 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Manager - Dashboard</title>
-
-    <!-- external internal links -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- custom stylesheet links -->
     <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 <body>
     <header>
         <h1><i class="fas fa-tasks"></i> Task Manager Dashboard</h1>
         <button class="logout-btn" onclick="logout()">
-        <i class="fas fa-sign-out-alt"></i> Logout
+            <i class="fas fa-sign-out-alt"></i> Logout
         </button>
     </header>
 
+    <!-- Search Container -->
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="task-search" placeholder="Search tasks by title, description, or assignee...">
+            <button class="clear-search" id="clear-search" title="Clear search">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
     <div class="container">
-     
+        <!-- Task Creation Form -->
         <div class="task-form">
             <h2><i class="fas fa-plus-circle"></i> Create New Task</h2>
             <div class="form-group">
@@ -41,12 +48,11 @@
             </button>
         </div>
 
-    
+        <!-- Task Board -->
         <div class="task-board">
             <div class="task-section" id="todo-tasks">
                 <h2><i class="fas fa-clipboard-list"></i> To Do</h2>
                 <div class="tasks-container">
-                   
                     <div class="empty-state">
                         <i class="fas fa-inbox"></i>
                         <p>No tasks to display</p>
@@ -57,7 +63,6 @@
             <div class="task-section" id="inprogress-tasks">
                 <h2><i class="fas fa-spinner"></i> In Progress</h2>
                 <div class="tasks-container">
-                
                     <div class="empty-state">
                         <i class="fas fa-inbox"></i>
                         <p>No tasks in progress</p>
@@ -68,7 +73,6 @@
             <div class="task-section" id="done-tasks">
                 <h2><i class="fas fa-check-circle"></i> Done</h2>
                 <div class="tasks-container">
-                   
                     <div class="empty-state">
                         <i class="fas fa-inbox"></i>
                         <p>No completed tasks</p>
@@ -78,7 +82,7 @@
         </div>
     </div>
 
-    <!-- Firebase script tags-->
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
