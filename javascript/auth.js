@@ -1,3 +1,4 @@
+
 // Initialize Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyCAnHygODaxm6JrFlyNhimgXaUtEt1Jvv8",
@@ -88,8 +89,8 @@ if (loginForm) {
 
         auth.signInWithEmailAndPassword(email, password)
             .then(() => {
-                authModal.classList.remove("active");
-                alert("✅ Login Successful! Welcome back to TaskMaster!");
+                // Redirect to dashboard on successful login
+                window.location.href = "dashboard.html"; // Replace with your dashboard page path
                 clearMessage();
             })
             .catch(error => {
@@ -152,6 +153,8 @@ if (googleSignIn) {
             const result = await auth.signInWithPopup(googleProvider);
             authModal.classList.remove("active");
             alert(`👋 Welcome ${result.user.displayName || 'User'}! Google login successful!`);
+            // Redirect to dashboard
+            window.location.href = "dashboard.html"; // Replace with your dashboard page path
             clearMessage();
         } catch (error) {
             showMessage(getFriendlyErrorMessage(error), "error");
