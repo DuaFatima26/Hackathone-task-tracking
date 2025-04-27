@@ -14,15 +14,15 @@ const app = firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const auth = firebase.auth();
 
-// Check authentication state
+
 auth.onAuthStateChanged(user => {
     if (!user) {
-        // Redirect to login if not authenticated
+        
         window.location.href = "../index.html";
     }
 });
 
-// Handle Logout
+
 function logout() {
     auth.signOut().then(() => {
         window.location.href = "../index.html";
@@ -49,12 +49,11 @@ function addTask() {
 
         newTaskRef.set(taskData)
             .then(() => {
-                // Clear form
+              
                 document.getElementById('task-title').value = '';
                 document.getElementById('task-description').value = '';
                 document.getElementById('assigned-to').value = '';
-                
-                // Show success animation
+             
                 const btn = document.querySelector('.add-task-btn');
                 btn.innerHTML = '<i class="fas fa-check"></i> Task Added!';
                 btn.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
@@ -69,7 +68,7 @@ function addTask() {
                 alert("Error adding task: " + error.message);
             });
     } else {
-        // Shake animation for validation
+     
         const form = document.querySelector('.task-form');
         form.style.animation = 'shake 0.5s';
         setTimeout(() => {
@@ -80,10 +79,10 @@ function addTask() {
     }
 }
 
-// Edit Task
+
 function editTask(taskId, currentTask) {
     const title = prompt("Enter new title:", currentTask.title);
-    if (title === null) return; // User cancelled
+    if (title === null) return; 
     
     const description = prompt("Enter new description:", currentTask.description);
     if (description === null) return;
@@ -97,7 +96,7 @@ function editTask(taskId, currentTask) {
             description: description,
             assignedTo: assignedTo
         }).then(() => {
-            // Visual feedback
+           
             const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
             if (taskElement) {
                 taskElement.style.transform = 'scale(1.05)';
@@ -114,7 +113,6 @@ function editTask(taskId, currentTask) {
     }
 }
 
-// Delete Task
 function deleteTask(taskId) {
     if (confirm("Are you sure you want to delete this task?")) {
         const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
@@ -137,7 +135,7 @@ function deleteTask(taskId) {
     }
 }
 
-// Move task to a different status
+
 function moveTask(taskId, newStatus) {
     const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
     if (taskElement) {
@@ -157,19 +155,19 @@ function moveTask(taskId, newStatus) {
     });
 }
 
-// Display tasks with search filtering
+
 function displayTasks(tasks, searchTerm = '') {
     const todoContainer = document.querySelector('#todo-tasks .tasks-container');
     const inProgressContainer = document.querySelector('#inprogress-tasks .tasks-container');
     const doneContainer = document.querySelector('#done-tasks .tasks-container');
 
-    // Clear containers
+    
     todoContainer.innerHTML = '';
     inProgressContainer.innerHTML = '';
     doneContainer.innerHTML = '';
 
     if (!tasks) {
-        // Show empty states if no tasks
+    
         todoContainer.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No tasks to display</p></div>';
         inProgressContainer.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No tasks in progress</p></div>';
         doneContainer.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No completed tasks</p></div>';
@@ -180,7 +178,7 @@ function displayTasks(tasks, searchTerm = '') {
     const searchTermLower = searchTerm.toLowerCase();
 
     Object.entries(tasks).forEach(([taskId, task]) => {
-        // Check if task matches search term
+       
         const matchesSearch = searchTerm === '' || 
             (task.title && task.title.toLowerCase().includes(searchTermLower)) ||
             (task.description && task.description.toLowerCase().includes(searchTermLower)) ||
@@ -204,25 +202,25 @@ function displayTasks(tasks, searchTerm = '') {
         }
     });
 
-    // Show "no results" message if search didn't match any tasks
+    
     if (searchTerm && !hasResults) {
         const noResultsDiv = document.createElement('div');
         noResultsDiv.className = 'no-results';
         noResultsDiv.innerHTML = '<i class="fas fa-search"></i><p>No tasks found matching your search</p>';
         
-        // Add to all containers
+       
         todoContainer.appendChild(noResultsDiv.cloneNode(true));
         inProgressContainer.appendChild(noResultsDiv.cloneNode(true));
         doneContainer.appendChild(noResultsDiv.cloneNode(true));
     } else if (!hasResults) {
-        // Show empty states if no tasks at all
+        
         todoContainer.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No tasks to display</p></div>';
         inProgressContainer.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No tasks in progress</p></div>';
         doneContainer.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No completed tasks</p></div>';
     }
 }
 
-// Create task element
+
 function createTaskElement(taskId, task) {
     const taskElement = document.createElement('div');
     taskElement.className = `task ${task.status.toLowerCase().replace(' ', '')}`;
@@ -238,7 +236,7 @@ function createTaskElement(taskId, task) {
     
     const actionsContainer = taskElement.querySelector('.task-actions');
     
-    // Add appropriate buttons based on status
+  
     if (task.status === 'To Do') {
         addActionButton(actionsContainer, 'Start Progress', () => moveTask(taskId, 'In Progress'), 'fas fa-play', 'move-btn');
     } else if (task.status === 'In Progress') {
@@ -254,7 +252,6 @@ function createTaskElement(taskId, task) {
     return taskElement;
 }
 
-// Helper function to add action buttons
 function addActionButton(container, text, onClick, iconClass, btnClass) {
     const button = document.createElement('button');
     button.className = `action-btn ${btnClass}`;
@@ -265,7 +262,7 @@ function addActionButton(container, text, onClick, iconClass, btnClass) {
 
 // Initialize the app
 window.onload = function() {
-    // Add shake animation to CSS
+    // Add shake animation to CSS with the help of Ai
     const style = document.createElement('style');
     style.textContent = `
         @keyframes shake {
@@ -279,13 +276,13 @@ window.onload = function() {
     `;
     document.head.appendChild(style);
     
-    // Set up realtime listener for tasks
+    
     db.ref('tasks').on('value', (snapshot) => {
         const searchInput = document.getElementById('task-search');
         displayTasks(snapshot.val(), searchInput ? searchInput.value : '');
     });
 
-    // Set up search functionality
+    
     const searchInput = document.getElementById('task-search');
     const clearSearchBtn = document.getElementById('clear-search');
 
