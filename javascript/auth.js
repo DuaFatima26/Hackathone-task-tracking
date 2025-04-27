@@ -1,4 +1,3 @@
-
 // Initialize Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyCAnHygODaxm6JrFlyNhimgXaUtEt1Jvv8",
@@ -10,26 +9,26 @@ const firebaseConfig = {
     measurementId: "G-SEBLZBDCWJ"
 };
 
-// Initialize Firebase
+
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
-// Add Google scopes
+
 googleProvider.addScope('email');
 googleProvider.addScope('profile');
 
-// DOM Elements
+
 const authModal = document.getElementById('authModal');
 const authMessage = document.getElementById('authMessage');
 
-// Helper Functions
+
 function showMessage(message, type) {
     if (authMessage) {
         authMessage.textContent = message;
         authMessage.className = "auth-message " + type;
         
-        // Auto-hide message after 5 seconds
+       
         setTimeout(() => {
             if (authMessage.textContent === message) {
                 clearMessage();
@@ -45,7 +44,7 @@ function clearMessage() {
     }
 }
 
-// Improved error handler
+
 function getFriendlyErrorMessage(error) {
     if (!error.code) return "An unknown error occurred";
     
@@ -79,7 +78,7 @@ function getFriendlyErrorMessage(error) {
     }
 }
 
-// Login Handler
+
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
@@ -89,8 +88,8 @@ if (loginForm) {
 
         auth.signInWithEmailAndPassword(email, password)
             .then(() => {
-                // Redirect to dashboard on successful login
-                window.location.href = "./html/dashboard.html"; // Replace with your dashboard page path
+               
+                window.location.href = "./html/dashboard.html"; 
                 clearMessage();
             })
             .catch(error => {
@@ -99,7 +98,7 @@ if (loginForm) {
     });
 }
 
-// Signup Handler
+
 const signupForm = document.getElementById('signupForm');
 if (signupForm) {
     signupForm.addEventListener('submit', (e) => {
@@ -143,7 +142,7 @@ if (forgotPassword) {
     });
 }
 
-// Google Sign-In Handler
+
 const googleSignIn = document.getElementById('googleSignIn');
 if (googleSignIn) {
     googleSignIn.addEventListener('click', async (e) => {
@@ -153,8 +152,8 @@ if (googleSignIn) {
             const result = await auth.signInWithPopup(googleProvider);
             authModal.classList.remove("active");
             alert(`👋 Welcome ${result.user.displayName || 'User'}! Google login successful!`);
-            // Redirect to dashboard
-            window.location.href = "./html/dashboard.html"; // Replace with your dashboard page path
+           
+            window.location.href = "./html/dashboard.html"; 
             clearMessage();
         } catch (error) {
             showMessage(getFriendlyErrorMessage(error), "error");
@@ -162,7 +161,7 @@ if (googleSignIn) {
     });
 }
 
-// Check auth state
+
 auth.onAuthStateChanged(user => {
     if (user) {
         console.log("User logged in:", user.email);

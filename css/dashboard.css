@@ -1,3 +1,4 @@
+/* styling done with the help of Ai */
 :root {
     --primary: #4361ee;
     --secondary: #3f37c9;
@@ -79,7 +80,6 @@ h1 {
     margin: 0 auto;
 }
 
-/* Task Form */
 .task-form {
     background: white;
     border-radius: 12px;
@@ -212,7 +212,7 @@ textarea.form-control {
     min-height: 100px;
 }
 
-/* Task Card */
+
 .task {
     background: white;
     border-radius: 10px;
@@ -321,7 +321,7 @@ textarea.form-control {
     background-color: rgba(220, 53, 69, 0.2);
 }
 
-/* Status Badge */
+
 .status-badge {
     position: absolute;
     top: 0;
@@ -349,7 +349,7 @@ textarea.form-control {
     color: var(--done);
 }
 
-/* Empty State */
+
 .empty-state {
     text-align: center;
     padding: 2rem 0;
@@ -389,7 +389,7 @@ textarea.form-control {
     }
 }
 
-/* Responsive */
+/* Responsivness */
 @media (max-width: 768px) {
     .task-board {
         grid-template-columns: 1fr;

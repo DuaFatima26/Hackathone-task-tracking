@@ -1,4 +1,4 @@
-// Initialize particles.js
+// animation done with the help of Ai
 document.addEventListener('DOMContentLoaded', function() {
     particlesJS('particles-js', {
         particles: {
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Modal toggle functionality
+    // Modal 
     const signupBtn = document.getElementById('signup-btn');
     const loginBtn = document.getElementById('login-btn');
     const authModal = document.getElementById('authModal');
@@ -27,13 +27,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (signupBtn && loginBtn && authModal) {
         signupBtn.addEventListener('click', () => {
             authModal.classList.add('active');
-            // Switch to signup tab
+           
             document.querySelector('.tab[data-tab="signup"]').click();
         });
 
         loginBtn.addEventListener('click', () => {
             authModal.classList.add('active');
-            // Switch to login tab
+          
             document.querySelector('.tab[data-tab="login"]').click();
         });
     }
@@ -41,45 +41,45 @@ document.addEventListener('DOMContentLoaded', function() {
     if (closeModal) {
         closeModal.addEventListener('click', () => {
             authModal.classList.remove('active');
-            // Clear any messages
+      
             document.getElementById('authMessage').className = "auth-message";
             document.getElementById('authMessage').textContent = "";
         });
     }
 
-    // Close modal when clicking outside
+  
     authModal.addEventListener('click', (e) => {
         if (e.target === authModal) {
             authModal.classList.remove('active');
-            // Clear any messages
+         
             document.getElementById('authMessage').className = "auth-message";
             document.getElementById('authMessage').textContent = "";
         }
     });
 
-    // Tab switching
+  
     const tabs = document.querySelectorAll('.tab');
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             const tabId = tab.getAttribute('data-tab');
             
-            // Update active tab
+         
             tabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
             
-            // Update active content
+
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
             });
             document.getElementById(`${tabId}Form`).classList.add('active');
             
-            // Clear any messages
+          
             document.getElementById('authMessage').className = "auth-message";
             document.getElementById('authMessage').textContent = "";
         });
     });
 
-    // Show login from signup
+   
     const showLogin = document.getElementById('showLogin');
     if (showLogin) {
         showLogin.addEventListener('click', (e) => {
